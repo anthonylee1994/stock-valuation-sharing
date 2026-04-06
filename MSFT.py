@@ -1,5 +1,5 @@
 """
-Generate rainbow valuation charts for multiple stocks
+Generate MSFT rainbow valuation chart
 """
 
 from rainbow_chart import create_rainbow_chart

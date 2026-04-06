@@ -1,5 +1,5 @@
 """
-Generate 700.HK (Tencent) rainbow valuation chart
+Generate 0700.HK (Tencent) rainbow valuation chart
 """
 
 from rainbow_chart import create_rainbow_chart
