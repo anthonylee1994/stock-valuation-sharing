@@ -83,13 +83,13 @@ create_rainbow_chart(
 
 ## 已分析股票
 
-| 股票代碼 | 公司名稱 | 當前估值 | 評級 |
-|---------|---------|---------|------|
-| **GOOG** | Google/Alphabet | 合理估值 | ⭐⭐⭐ 持有 |
-| **MSFT** | Microsoft | 嚴重低估 | ⭐⭐⭐⭐⭐ 強力買入 |
-| **TSM** | 台積電 | 合理偏高 | ⭐⭐⭐ 持有 |
-| **AVGO** | Broadcom | 低估 | ⭐⭐⭐⭐ 買入 |
-| **0700.HK** | 騰訊控股 | 合理偏低 | ⭐⭐⭐⭐ 買入 |
+| 股票代碼    | 公司名稱        | 當前估值 | 評級                |
+| ----------- | --------------- | -------- | ------------------- |
+| **GOOG**    | Google/Alphabet | 合理估值 | ⭐⭐⭐ 持有         |
+| **MSFT**    | Microsoft       | 嚴重低估 | ⭐⭐⭐⭐⭐ 強力買入 |
+| **TSM**     | 台積電          | 合理偏高 | ⭐⭐⭐ 持有         |
+| **AVGO**    | Broadcom        | 低估     | ⭐⭐⭐⭐ 買入       |
+| **0700.HK** | 騰訊控股        | 合理偏低 | ⭐⭐⭐⭐ 買入       |
 
 詳細分析請參閱 [summary.md](data/summary.md)
 
@@ -104,14 +104,6 @@ create_rainbow_chart(
 5. 動態調整估值區間（每年根據 EPS 變化）
 
 詳細方法論請參閱 [估值模型計算步驟](data/models/估值模型計算步驟.md)
-
-## 圖表範例
-
-### GOOG 彩虹估值圖
-![GOOG Rainbow Chart](data/images/GOOG_professional_chart.png)
-
-### MSFT 彩虹估值圖
-![MSFT Rainbow Chart](data/images/MSFT_professional_chart.png)
 
 ## 技術棧
 
@@ -128,7 +120,3 @@ create_rainbow_chart(
 ## 授權
 
 MIT License
-
-## 貢獻
-
-歡迎提交 Issue 或 Pull Request！
