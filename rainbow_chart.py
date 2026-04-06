@@ -156,7 +156,7 @@ def create_rainbow_chart(
     # Formatting
     ax.set_xlabel('日期', fontsize=13, fontweight='bold', color='#D1D4DC')
     ax.set_ylabel('股價 ($)', fontsize=13, fontweight='bold', color='#D1D4DC')
-    ax.set_title(f'{ticker_symbol} 彩虹估值圖 - 專業分析\n基於5年平均市盈率及歷史每股盈利',
+    ax.set_title(f'{ticker_symbol} 彩虹估值圖\n基於5年平均市盈率及歷史每股盈利',
                  fontsize=16, fontweight='bold', pad=20, color='#D1D4DC')
 
     ax.grid(True, alpha=0.15, linestyle='--', linewidth=0.5, color='#363A45')
