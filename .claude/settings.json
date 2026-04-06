@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls -la *.md *.pdf *.png)",
+      "Bash(git add:*)"
+    ],
+    "additionalDirectories": [
+      "/Users/anthony/Documents/Development/stock-valuation-sharing"
+    ]
+  }
+}
