@@ -4,15 +4,16 @@ Generate 0700.HK (Tencent) rainbow valuation chart
 
 from rainbow_chart import create_rainbow_chart
 
-# Note: EPS in RMB, prices in HKD (approximately 1:1 ratio)
+# 注意：EPS 以港幣計算，股價亦以港幣計算
+# RMB EPS 已按 1.136 匯率換算成 HKD (2026年4月匯率)
 tencent_eps = {
-    2021: 13.23,
-    2022: 11.01,
-    2023: 9.14,
-    2024: 24.68,
-    2025: 28.58,
-    2026: 33.00,  # Estimated
-    2027: 36.00,  # Estimated
+    2021: 15.03,  # 13.23 * 1.136
+    2022: 12.51,  # 11.01 * 1.136
+    2023: 10.38,  # 9.14 * 1.136
+    2024: 28.04,  # 24.68 * 1.136
+    2025: 32.47,  # 28.58 * 1.136
+    2026: 37.49,  # 33.00 * 1.136 (預估)
+    2027: 40.90,  # 36.00 * 1.136 (預估)
 }
 
 tencent_pe_bands = {

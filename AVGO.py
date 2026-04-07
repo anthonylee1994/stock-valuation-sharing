@@ -8,10 +8,10 @@ avgo_eps = {
     2021: 27.45,
     2022: 33.20,
     2023: 41.42,
-    2024: 15.41,  # VMware acquisition impact
+    2024: 15.41,  # VMware 併購影響
     2025: 59.69,
-    2026: 9.00,   # Estimated
-    2027: 16.55,  # Estimated
+    2026: 9.00,   # 預估
+    2027: 16.55,  # 預估
 }
 
 avgo_pe_bands = {
