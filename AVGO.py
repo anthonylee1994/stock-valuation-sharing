@@ -1,5 +1,5 @@
 """
-Generate AVGO rainbow valuation chart
+生成博通 (AVGO) 彩虹估值圖
 """
 
 from rainbow_chart import create_rainbow_chart

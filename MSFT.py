@@ -1,5 +1,5 @@
 """
-Generate MSFT rainbow valuation chart
+生成微軟 (MSFT) 彩虹估值圖
 """
 
 from rainbow_chart import create_rainbow_chart

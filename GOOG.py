@@ -1,5 +1,5 @@
 """
-Generate GOOG rainbow valuation chart
+生成谷歌 (GOOG) 彩虹估值圖
 """
 
 from rainbow_chart import create_rainbow_chart

@@ -1,5 +1,5 @@
 """
-Generate TSM rainbow valuation chart
+生成台積電 (TSM) 彩虹估值圖
 """
 
 from rainbow_chart import create_rainbow_chart

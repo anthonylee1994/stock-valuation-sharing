@@ -1,5 +1,5 @@
 """
-Generate 0700.HK (Tencent) rainbow valuation chart
+生成騰訊 (0700.HK) 彩虹估值圖
 """
 
 from rainbow_chart import create_rainbow_chart
