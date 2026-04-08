@@ -15,17 +15,17 @@ tsm_eps = {
 }
 
 tsm_pe_bands = {
-    '嚴重高估': 35,
-    '高估': 27.5,
-    '合理偏高': 25,
-    '合理估值': 22.0,
-    '合理偏低': 19,
-    '低估': 16.4,
-    '嚴重低估': 12,
+    "嚴重高估": 35,
+    "高估": 27.5,
+    "合理偏高": 25,
+    "合理估值": 22.0,
+    "合理偏低": 19,
+    "低估": 16.4,
+    "嚴重低估": 12,
 }
 
 create_rainbow_chart(
-    ticker_symbol='TSM',
+    ticker_symbol="TSM",
     eps_by_year=tsm_eps,
     pe_bands=tsm_pe_bands,
 )

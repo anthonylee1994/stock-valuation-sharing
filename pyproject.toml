@@ -8,5 +8,6 @@ dependencies = [
     "matplotlib>=3.10.8",
     "mplfinance>=0.12.10b0",
     "numpy>=2.4.4",
+    "ruff>=0.15.9",
     "yfinance>=1.2.0",
 ]

@@ -17,17 +17,17 @@ tencent_eps = {
 }
 
 tencent_pe_bands = {
-    '嚴重高估': 30,
-    '高估': 25.0,
-    '合理偏高': 21,
-    '合理估值': 18.5,
-    '合理偏低': 16,
-    '低估': 14.0,
-    '嚴重低估': 10,
+    "嚴重高估": 30,
+    "高估": 25.0,
+    "合理偏高": 21,
+    "合理估值": 18.5,
+    "合理偏低": 16,
+    "低估": 14.0,
+    "嚴重低估": 10,
 }
 
 create_rainbow_chart(
-    ticker_symbol='0700.HK',
+    ticker_symbol="0700.HK",
     eps_by_year=tencent_eps,
     pe_bands=tencent_pe_bands,
 )

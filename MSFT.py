@@ -15,18 +15,17 @@ msft_eps = {
 }
 
 msft_pe_bands = {
-    '嚴重高估': 42,
-    '高估': 38.7,
-    '合理偏高': 35,
-    '合理估值': 31.8,
-    '合理偏低': 28,
-    '低估': 24.9,
-    '嚴重低估': 20,
+    "嚴重高估": 42,
+    "高估": 38.7,
+    "合理偏高": 35,
+    "合理估值": 31.8,
+    "合理偏低": 28,
+    "低估": 24.9,
+    "嚴重低估": 20,
 }
 
 create_rainbow_chart(
-    ticker_symbol='MSFT',
+    ticker_symbol="MSFT",
     eps_by_year=msft_eps,
     pe_bands=msft_pe_bands,
 )
-

@@ -15,17 +15,17 @@ goog_eps = {
 }
 
 goog_pe_bands = {
-    '嚴重高估': 35,
-    '高估': 28.9,
-    '合理偏高': 25,
-    '合理估值': 22.3,
-    '合理偏低': 19,
-    '低估': 15.7,
-    '嚴重低估': 12,
+    "嚴重高估": 35,
+    "高估": 28.9,
+    "合理偏高": 25,
+    "合理估值": 22.3,
+    "合理偏低": 19,
+    "低估": 15.7,
+    "嚴重低估": 12,
 }
 
 create_rainbow_chart(
-    ticker_symbol='GOOG',
+    ticker_symbol="GOOG",
     eps_by_year=goog_eps,
     pe_bands=goog_pe_bands,
 )
