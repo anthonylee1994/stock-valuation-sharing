@@ -214,6 +214,7 @@ def create_rainbow_chart(
     start_date: str = None,
     end_date: str = None,
     save_path: str = None,
+    dpi: int = 150,
 ):
     """
     為股票製作彩虹估值圖
@@ -224,6 +225,8 @@ def create_rainbow_chart(
         pe_bands: 估值標籤 -> 市盈率倍數嘅字典
         start_date: 歷史數據開始日期
         end_date: 歷史數據結束日期
+        save_path: 儲存路徑 (如果唔指定就直接顯示)
+        dpi: 圖片解析度 (預設 150)
     """
     if start_date is None:
         start_date = (datetime.now() - timedelta(days=365 * 5)).strftime("%Y-%m-%d")
@@ -247,6 +250,7 @@ def create_rainbow_chart(
     plt.tight_layout()
 
     if save_path:
-        plt.savefig(save_path)
+        plt.savefig(save_path, dpi=dpi, bbox_inches="tight")
+        print(f"✅ 圖表已儲存至: {save_path}")
     else:
         plt.show()

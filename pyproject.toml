@@ -1,7 +1,7 @@
 [project]
 name = "stock-valuation-sharing"
 version = "0.1.0"
-description = "Stock Valuation Sharing"
+description = "使用彩虹估值圖分析股票估值，基於 EPS 同 PE Bands 生成視覺化圖表"
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
@@ -10,4 +10,9 @@ dependencies = [
     "numpy>=2.4.4",
     "ruff>=0.15.9",
     "yfinance>=1.2.0",
+    "jsonschema>=4.23.0",
 ]
+
+[tool.ruff]
+line-length = 100
+target-version = "py314"

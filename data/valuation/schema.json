@@ -1,0 +1,81 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/yourusername/stock-valuation-sharing/schema/valuation.json",
+  "title": "股票估值數據",
+  "description": "用於彩虹估值圖嘅股票 EPS 同 PE Bands 數據結構",
+  "type": "object",
+  "required": ["ticker", "eps", "pe_bands"],
+  "properties": {
+    "ticker": {
+      "type": "string",
+      "description": "股票代號（例如：GOOG, MSFT, 0700.HK）",
+      "examples": ["GOOG", "MSFT", "TSM", "0700.HK"]
+    },
+    "eps": {
+      "type": "object",
+      "description": "每股盈利數據，key 為年份字串，value 為 EPS 數值",
+      "patternProperties": {
+        "^[0-9]{4}$": {
+          "type": "number",
+          "description": "該年份嘅每股盈利（EPS）"
+        }
+      },
+      "additionalProperties": false,
+      "minProperties": 1
+    },
+    "pe_bands": {
+      "type": "object",
+      "description": "市盈率估值區間，key 為估值標籤，value 為 PE 倍數",
+      "properties": {
+        "嚴重高估": {
+          "type": "number",
+          "description": "嚴重高估區間嘅 PE 倍數"
+        },
+        "高估": {
+          "type": "number",
+          "description": "高估區間嘅 PE 倍數"
+        },
+        "合理偏高": {
+          "type": "number",
+          "description": "合理偏高區間嘅 PE 倍數"
+        },
+        "合理估值": {
+          "type": "number",
+          "description": "合理估值區間嘅 PE 倍數"
+        },
+        "合理偏低": {
+          "type": "number",
+          "description": "合理偏低區間嘅 PE 倍數"
+        },
+        "低估": {
+          "type": "number",
+          "description": "低估區間嘅 PE 倍數"
+        },
+        "嚴重低估": {
+          "type": "number",
+          "description": "嚴重低估區間嘅 PE 倍數"
+        }
+      },
+      "required": ["嚴重高估", "高估", "合理偏高", "合理估值", "合理偏低", "低估", "嚴重低估"],
+      "additionalProperties": false
+    },
+    "notes": {
+      "type": "object",
+      "description": "額外註解資訊（可選）",
+      "properties": {
+        "currency": {
+          "type": "string",
+          "description": "貨幣單位（例如：USD, HKD）"
+        },
+        "exchange_rate": {
+          "type": "number",
+          "description": "匯率（如適用）"
+        },
+        "description": {
+          "type": "string",
+          "description": "額外說明"
+        }
+      }
+    }
+  }
+}

@@ -1,4 +1,5 @@
 {
+  "$schema": "./schema.json",
   "ticker": "GOOG",
   "eps": {
     "2021": 5.61,

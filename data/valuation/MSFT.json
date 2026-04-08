@@ -1,4 +1,5 @@
 {
+  "$schema": "./schema.json",
   "ticker": "MSFT",
   "eps": {
     "2021": 8.05,
