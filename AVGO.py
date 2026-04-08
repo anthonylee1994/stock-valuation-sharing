@@ -2,27 +2,19 @@
 生成博通 (AVGO) 彩虹估值圖
 """
 
+import json
+from pathlib import Path
+
 from rainbow_chart import create_rainbow_chart
 
-avgo_eps = {
-    2021: 1.5,
-    2022: 2.65,
-    2023: 3.3,
-    2024: 1.3,  # VMware 併購影響
-    2025: 4.9,
-    2026: 9.2,  # 預估
-    2027: 16.2,  # 預估
-}
+# 讀取 JSON 數據
+data_path = Path(__file__).parent / "data" / "valuation" / "AVGO.json"
+with open(data_path) as f:
+    data = json.load(f)
 
-avgo_pe_bands = {
-    "嚴重高估": 45,
-    "高估": 40.0,
-    "合理偏高": 33,
-    "合理估值": 28.5,
-    "合理偏低": 23,
-    "低估": 18.0,
-    "嚴重低估": 14,
-}
+# 將 EPS 年份由字串轉換為整數
+avgo_eps = {int(year): eps for year, eps in data["eps"].items()}
+avgo_pe_bands = data["pe_bands"]
 
 create_rainbow_chart(
     ticker_symbol="AVGO",

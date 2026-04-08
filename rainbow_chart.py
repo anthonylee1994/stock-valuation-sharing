@@ -51,7 +51,7 @@ def get_eps_for_date(date, eps_by_year: Dict[int, float]) -> float:
                 eps1, eps2 = eps_by_year[y1], eps_by_year[y2]
                 progress = (year - y1) / (y2 - y1)
                 return eps1 + (eps2 - eps1) * progress
-        return eps_by_year[year]
+        raise ValueError(f"No EPS data found for year {year}")
 
 
 def calculate_price_bands(
@@ -211,8 +211,9 @@ def create_rainbow_chart(
     ticker_symbol: str,
     eps_by_year: Dict[int, float],
     pe_bands: Dict[str, float],
-    start_date: str = (datetime.now() - timedelta(days=365 * 5)).strftime("%Y-%m-%d"),
-    end_date: str = datetime.now().strftime("%Y-%m-%d"),
+    start_date: str = None,
+    end_date: str = None,
+    save_path: str = None,
 ):
     """
     為股票製作彩虹估值圖
@@ -224,6 +225,11 @@ def create_rainbow_chart(
         start_date: 歷史數據開始日期
         end_date: 歷史數據結束日期
     """
+    if start_date is None:
+        start_date = (datetime.now() - timedelta(days=365 * 5)).strftime("%Y-%m-%d")
+    if end_date is None:
+        end_date = datetime.now().strftime("%Y-%m-%d")
+
     df = fetch_stock_data(ticker_symbol, start_date, end_date)
     if df is None:
         return
@@ -239,4 +245,8 @@ def create_rainbow_chart(
     format_chart(ax, ticker_symbol, df, price_bands_dynamic)
 
     plt.tight_layout()
-    plt.show()
+
+    if save_path:
+        plt.savefig(save_path)
+    else:
+        plt.show()

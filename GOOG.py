@@ -2,27 +2,19 @@
 生成谷歌 (GOOG) 彩虹估值圖
 """
 
+import json
+from pathlib import Path
+
 from rainbow_chart import create_rainbow_chart
 
-goog_eps = {
-    2021: 5.61,
-    2022: 4.56,
-    2023: 5.80,
-    2024: 6.91,
-    2025: 10.21,
-    2026: 11.50,  # 預估
-    2027: 13.41,  # 預估
-}
+# 讀取 JSON 數據
+data_path = Path(__file__).parent / "data" / "valuation" / "GOOG.json"
+with open(data_path) as f:
+    data = json.load(f)
 
-goog_pe_bands = {
-    "嚴重高估": 35,
-    "高估": 28.9,
-    "合理偏高": 25,
-    "合理估值": 22.3,
-    "合理偏低": 19,
-    "低估": 15.7,
-    "嚴重低估": 12,
-}
+# 將 EPS 年份由字串轉換為整數
+goog_eps = {int(year): eps for year, eps in data["eps"].items()}
+goog_pe_bands = data["pe_bands"]
 
 create_rainbow_chart(
     ticker_symbol="GOOG",

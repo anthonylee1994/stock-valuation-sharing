@@ -2,29 +2,19 @@
 生成騰訊 (0700.HK) 彩虹估值圖
 """
 
+import json
+from pathlib import Path
+
 from rainbow_chart import create_rainbow_chart
 
-# 注意：EPS 以港幣計算，股價亦以港幣計算
-# RMB EPS 已按 1.136 匯率換算成 HKD (2026年4月匯率)
-tencent_eps = {
-    2021: 15.03,  # 13.23 * 1.136
-    2022: 12.51,  # 11.01 * 1.136
-    2023: 10.38,  # 9.14 * 1.136
-    2024: 28.04,  # 24.68 * 1.136
-    2025: 32.47,  # 28.58 * 1.136
-    2026: 37.49,  # 33.00 * 1.136 (預估)
-    2027: 40.90,  # 36.00 * 1.136 (預估)
-}
+# 讀取 JSON 數據
+data_path = Path(__file__).parent / "data" / "valuation" / "0700.HK.json"
+with open(data_path) as f:
+    data = json.load(f)
 
-tencent_pe_bands = {
-    "嚴重高估": 30,
-    "高估": 25.0,
-    "合理偏高": 21,
-    "合理估值": 18.5,
-    "合理偏低": 16,
-    "低估": 14.0,
-    "嚴重低估": 10,
-}
+# 將 EPS 年份由字串轉換為整數
+tencent_eps = {int(year): eps for year, eps in data["eps"].items()}
+tencent_pe_bands = data["pe_bands"]
 
 create_rainbow_chart(
     ticker_symbol="0700.HK",

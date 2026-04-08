@@ -2,27 +2,19 @@
 生成微軟 (MSFT) 彩虹估值圖
 """
 
+import json
+from pathlib import Path
+
 from rainbow_chart import create_rainbow_chart
 
-msft_eps = {
-    2021: 8.05,
-    2022: 9.65,
-    2023: 9.68,
-    2024: 11.80,
-    2025: 13.64,
-    2026: 16.50,  # 預估
-    2027: 20.15,  # 預估
-}
+# 讀取 JSON 數據
+data_path = Path(__file__).parent / "data" / "valuation" / "MSFT.json"
+with open(data_path) as f:
+    data = json.load(f)
 
-msft_pe_bands = {
-    "嚴重高估": 42,
-    "高估": 38.7,
-    "合理偏高": 35,
-    "合理估值": 31.8,
-    "合理偏低": 28,
-    "低估": 24.9,
-    "嚴重低估": 20,
-}
+# 將 EPS 年份由字串轉換為整數
+msft_eps = {int(year): eps for year, eps in data["eps"].items()}
+msft_pe_bands = data["pe_bands"]
 
 create_rainbow_chart(
     ticker_symbol="MSFT",
