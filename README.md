@@ -38,10 +38,17 @@ uv run python -m stock_valuation.cli generate --all --save
 uv run python -m stock_valuation.cli validate
 ```
 
+### 計算回本 P/E
+
+```bash
+uv run python -m stock_valuation.cli payback-pe 15
+uv run python -m stock_valuation.cli payback-pe 0.15 --years 12
+```
+
 ### 自訂股票圖表
 
 ```python
-from stock_valuation import create_rainbow_chart
+from stock_valuation import calculate_pe_for_payback, create_rainbow_chart
 
 # 設定 EPS 數據
 my_stock_eps = {
@@ -71,6 +78,9 @@ create_rainbow_chart(
     eps_by_year=my_stock_eps,
     pe_bands=my_pe_bands,
 )
+
+# 計算 10 年回本對應 P/E
+target_pe = calculate_pe_for_payback(0.15)
 ```
 
 ## 專案結構

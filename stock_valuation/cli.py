@@ -10,6 +10,7 @@ from stock_valuation.data import (
     list_available_tickers,
     load_valuation_data,
 )
+from stock_valuation.payback import calculate_pe_for_payback
 from stock_valuation.validation import validate_valuation_files
 
 
@@ -35,6 +36,11 @@ def build_parser() -> argparse.ArgumentParser:
 
     list_parser = subparsers.add_parser("list", help="列出可用股票代號")
     list_parser.set_defaults(handler=handle_list)
+
+    payback_parser = subparsers.add_parser("payback-pe", help="計算指定回本年期對應嘅 P/E")
+    payback_parser.add_argument("growth_rate", type=float, help="盈利增長率，例如 0.1 或 10")
+    payback_parser.add_argument("--years", type=int, default=10, help="目標回本年期")
+    payback_parser.set_defaults(handler=handle_payback_pe)
 
     return parser
 
@@ -83,6 +89,24 @@ def handle_list(_: argparse.Namespace) -> int:
     """列出可用 ticker。"""
     for ticker in list_available_tickers():
         print(ticker)
+    return 0
+
+
+def normalize_growth_rate(growth_rate: float) -> float:
+    """支援傳入小數或百分比格式。"""
+    if growth_rate > 1:
+        return growth_rate / 100
+    return growth_rate
+
+
+def handle_payback_pe(args: argparse.Namespace) -> int:
+    """計算指定增長率下嘅回本 P/E。"""
+    growth_rate = normalize_growth_rate(args.growth_rate)
+    pe_ratio = calculate_pe_for_payback(growth_rate=growth_rate, years=args.years)
+
+    print(f"增長率 = {growth_rate * 100:.2f}%")
+    print(f"回本年期 = {args.years}")
+    print(f"合理 P/E = {pe_ratio:.2f}")
     return 0
 
 

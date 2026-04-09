@@ -11,6 +11,7 @@ from stock_valuation.data import (
     list_available_tickers,
     load_valuation_data,
 )
+from stock_valuation.payback import calculate_pe_for_payback
 from stock_valuation.validation import validate_valuation_files
 
 
@@ -29,6 +30,7 @@ __all__ = [
     "ROOT_DIR",
     "VALUATION_DIR",
     "ValuationData",
+    "calculate_pe_for_payback",
     "create_rainbow_chart",
     "list_available_tickers",
     "load_valuation_data",
