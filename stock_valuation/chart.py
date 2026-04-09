@@ -5,6 +5,7 @@
 """
 
 from datetime import datetime, timedelta
+import math
 from typing import TypeAlias
 
 import matplotlib.pyplot as plt
@@ -150,7 +151,9 @@ def plot_stock_price(ax: Axes, df) -> None:
 
 def mark_current_price(ax: Axes, df) -> None:
     """標記同註釋現價"""
-    current_price = df["Close"].iloc[-1]
+    current_price = (
+        df["Close"].iloc[-2] if math.isnan(df["Close"].iloc[-1]) else df["Close"].iloc[-1]
+    )
     current_date = df.index[-1]
 
     ax.plot(
