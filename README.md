@@ -5,7 +5,7 @@
 ## 功能特點
 
 - 📊 **彩虹估值圖生成器** - 基於歷史市盈率的動態估值區間視覺化
-- 🕯️ **陰陽燭圖** - 專業 TradingView 風格的價格走勢圖
+- 📉 **價格走勢圖** - 專業 TradingView 風格的價格與估值區間圖
 - 🌈 **7層估值區間** - 從嚴重低估到嚴重高估的彩虹色帶
 - 🇭🇰 **繁體中文支援** - 完整中文化介面
 - 📈 **動態估值** - 根據每年 EPS 變化自動調整估值區間
@@ -30,6 +30,7 @@ uv run python -m stock_valuation.cli list
 uv run python -m stock_valuation.cli generate GOOG
 uv run python -m stock_valuation.cli generate MSFT TSM
 uv run python -m stock_valuation.cli generate --all --save
+uv run python -m stock_valuation.cli generate GOOG --save --output-dir ./charts
 ```
 
 ### 驗證估值資料

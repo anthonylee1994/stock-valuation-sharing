@@ -58,7 +58,13 @@ def handle_generate(args: argparse.Namespace) -> int:
     """處理圖表生成。"""
     from stock_valuation.chart import create_rainbow_chart
 
+    if args.output_dir and not args.save:
+        raise ValueError("使用 --output-dir 時必須同時指定 --save")
+    if args.dpi <= 0:
+        raise ValueError("dpi 必須大於 0")
+
     requested_tickers = resolve_requested_tickers(args.tickers, args.all)
+    has_failures = False
 
     for ticker_symbol in requested_tickers:
         valuation_data = load_valuation_data(ticker_symbol)
@@ -67,7 +73,7 @@ def handle_generate(args: argparse.Namespace) -> int:
         if args.save:
             save_path = build_chart_output_path(valuation_data.ticker, args.output_dir)
 
-        create_rainbow_chart(
+        chart_created = create_rainbow_chart(
             ticker_symbol=valuation_data.ticker,
             eps_by_year=valuation_data.eps_by_year,
             pe_bands=valuation_data.pe_bands,
@@ -76,8 +82,9 @@ def handle_generate(args: argparse.Namespace) -> int:
             save_path=str(save_path) if save_path else None,
             dpi=args.dpi,
         )
+        has_failures = has_failures or not chart_created
 
-    return 0
+    return 1 if has_failures else 0
 
 
 def handle_validate(_: argparse.Namespace) -> int:

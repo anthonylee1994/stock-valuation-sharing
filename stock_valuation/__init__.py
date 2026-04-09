@@ -12,7 +12,11 @@ from stock_valuation.data import (
     load_valuation_data,
 )
 from stock_valuation.payback import calculate_pe_for_payback
-from stock_valuation.validation import validate_valuation_files
+from stock_valuation.validation import (
+    ValidationIssue,
+    collect_valuation_validation_issues,
+    validate_valuation_files,
+)
 
 
 def __getattr__(name: str):
@@ -29,8 +33,10 @@ __all__ = [
     "RAINBOW_CHARTS_DIR",
     "ROOT_DIR",
     "VALUATION_DIR",
+    "ValidationIssue",
     "ValuationData",
     "calculate_pe_for_payback",
+    "collect_valuation_validation_issues",
     "create_rainbow_chart",
     "list_available_tickers",
     "load_valuation_data",

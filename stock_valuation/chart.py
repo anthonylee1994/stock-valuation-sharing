@@ -5,13 +5,14 @@
 """
 
 from datetime import datetime, timedelta
-import math
+from pathlib import Path
 from typing import TypeAlias
 
 import matplotlib.pyplot as plt
 import yfinance as yf
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
+from pandas import DataFrame, Timestamp
 
 EPSByYear: TypeAlias = dict[int, float]
 PEBands: TypeAlias = dict[str, float]
@@ -37,14 +38,17 @@ plt.rcParams["font.sans-serif"] = FONT_SANS_SERIF
 plt.rcParams["axes.unicode_minus"] = False  # 修正負號顯示
 
 
-def fetch_stock_data(ticker_symbol: str, start_date: str, end_date: str):
-    """獲取股票歷史數據"""
+def fetch_stock_data(ticker_symbol: str, start_date: str, end_date: str) -> DataFrame | None:
+    """獲取股票歷史數據。"""
     print(f"📊 正在獲取 {ticker_symbol} 歷史數據...")
-    ticker = yf.Ticker(ticker_symbol)
-    df = ticker.history(start=start_date, end=end_date)
+    try:
+        ticker = yf.Ticker(ticker_symbol)
+        df = ticker.history(start=start_date, end=end_date)
+    except Exception as error:
+        raise RuntimeError(f"獲取 {ticker_symbol} 歷史數據失敗: {error}") from error
 
     if df.empty:
-        print("❌ 無法獲取數據。")
+        print(f"❌ 無法獲取 {ticker_symbol} 數據。")
         return None
 
     print(f"✅ 已獲取 {len(df)} 個數據點")
@@ -67,8 +71,8 @@ def get_default_date_range() -> tuple[str, str]:
     return start_date, end_date
 
 
-def get_eps_for_date(date, eps_by_year: EPSByYear) -> float:
-    """獲取指定日期嘅每股盈利，喺年份之間進行插值"""
+def get_eps_for_date(date: Timestamp, eps_by_year: EPSByYear) -> float:
+    """獲取指定日期嘅每股盈利，喺年份之間進行插值。"""
     years = sorted(eps_by_year)
     year = date.year
 
@@ -86,15 +90,15 @@ def get_eps_for_date(date, eps_by_year: EPSByYear) -> float:
             progress = (year - start_year) / (end_year - start_year)
             return start_eps + (end_eps - start_eps) * progress
 
-    raise ValueError(f"No EPS data found for year {year}")
+    raise ValueError(f"搵唔到 {year} 年嘅 EPS 數據")
 
 
 def calculate_price_bands(
-    df,
+    df: DataFrame,
     eps_by_year: EPSByYear,
     pe_bands: PEBands,
 ) -> PriceBands:
-    """為每個日期計算動態價格區間"""
+    """為每個日期計算動態價格區間。"""
     return {
         label: [get_eps_for_date(date, eps_by_year) * pe for date in df.index]
         for label, pe in pe_bands.items()
@@ -102,7 +106,7 @@ def calculate_price_bands(
 
 
 def get_band_colors() -> dict[str, str]:
-    """返回彩虹顏色映射"""
+    """返回彩虹顏色映射。"""
     return {
         "嚴重高估": "#8B0000",
         "高估": "#FF4500",
@@ -115,7 +119,7 @@ def get_band_colors() -> dict[str, str]:
 
 
 def setup_chart() -> tuple[Figure, Axes]:
-    """建立同設定圖表"""
+    """建立同設定圖表。"""
     plt.style.use("dark_background")
     fig, ax = plt.subplots(figsize=(20, 11))
     fig.patch.set_facecolor(CHART_BACKGROUND)
@@ -125,12 +129,12 @@ def setup_chart() -> tuple[Figure, Axes]:
 
 def plot_rainbow_bands(
     ax: Axes,
-    df,
+    df: DataFrame,
     price_bands_dynamic: PriceBands,
     pe_bands: PEBands,
     band_colors: dict[str, str],
 ) -> None:
-    """繪製彩虹估值線"""
+    """繪製彩虹估值線。"""
     for label, prices in price_bands_dynamic.items():
         ax.plot(
             df.index,
@@ -144,17 +148,25 @@ def plot_rainbow_bands(
         )
 
 
-def plot_stock_price(ax: Axes, df) -> None:
-    """繪製股價線"""
+def plot_stock_price(ax: Axes, df: DataFrame) -> None:
+    """繪製股價線。"""
     ax.plot(df.index, df["Close"], color=PRICE_LINE_COLOR, linewidth=1, alpha=0.9, zorder=5)
 
 
-def mark_current_price(ax: Axes, df) -> None:
-    """標記同註釋現價"""
-    current_price = (
-        df["Close"].iloc[-2] if math.isnan(df["Close"].iloc[-1]) else df["Close"].iloc[-1]
-    )
-    current_date = df.index[-1]
+def get_latest_close_point(df: DataFrame) -> tuple[Timestamp, float]:
+    """取最後一個有效收市價及其日期。"""
+    valid_close = df["Close"].dropna()
+    if valid_close.empty:
+        raise ValueError("股價數據入面冇有效嘅收市價")
+
+    current_date = valid_close.index[-1]
+    current_price = float(valid_close.iloc[-1])
+    return current_date, current_price
+
+
+def mark_current_price(ax: Axes, df: DataFrame) -> None:
+    """標記同註釋現價。"""
+    current_date, current_price = get_latest_close_point(df)
 
     ax.plot(
         current_date,
@@ -193,11 +205,11 @@ def mark_current_price(ax: Axes, df) -> None:
 
 def add_price_labels(
     ax: Axes,
-    df,
+    df: DataFrame,
     price_bands_dynamic: PriceBands,
     band_colors: dict[str, str],
 ) -> None:
-    """喺右邊加上價格標籤"""
+    """喺右邊加上價格標籤。"""
     for label, prices in price_bands_dynamic.items():
         price = prices[-1]
         ax.text(
@@ -217,19 +229,22 @@ def add_price_labels(
         )
 
 
-def calculate_y_limits(df, price_bands_dynamic: PriceBands) -> tuple[float, float]:
+def calculate_y_limits(df: DataFrame, price_bands_dynamic: PriceBands) -> tuple[float, float]:
     """根據股價與估值線計算 y 軸上下界。"""
     band_min = min(min(prices) for prices in price_bands_dynamic.values())
     band_max = max(max(prices) for prices in price_bands_dynamic.values())
-    y_min = min(df["Close"].min(), band_min) * 0.8
-    y_max = max(df["Close"].max(), band_max) * 1.1
+    close_prices = df["Close"].dropna()
+    if close_prices.empty:
+        raise ValueError("股價數據入面冇有效嘅收市價")
+    y_min = min(float(close_prices.min()), band_min) * 0.8
+    y_max = max(float(close_prices.max()), band_max) * 1.1
     return y_min, y_max
 
 
 def format_chart(
     ax: Axes,
     ticker_symbol: str,
-    df,
+    df: DataFrame,
     price_bands_dynamic: PriceBands,
 ) -> None:
     """格式化圖表（標籤、標題、網格、圖例、y軸範圍）"""
@@ -261,15 +276,22 @@ def format_chart(
     ax.set_ylim(y_min, y_max)
 
 
+def validate_pe_bands(pe_bands: PEBands, band_colors: dict[str, str]) -> None:
+    """確認估值 label 同繪圖色表一致。"""
+    missing_labels = [label for label in pe_bands if label not in band_colors]
+    if missing_labels:
+        raise ValueError(f"未定義顏色嘅估值標籤: {', '.join(missing_labels)}")
+
+
 def create_rainbow_chart(
     ticker_symbol: str,
     eps_by_year: EPSByYear,
     pe_bands: PEBands,
-    start_date: str = None,
-    end_date: str = None,
-    save_path: str = None,
+    start_date: str | None = None,
+    end_date: str | None = None,
+    save_path: str | Path | None = None,
     dpi: int = 150,
-) -> None:
+) -> bool:
     """
     為股票製作彩虹估值圖
 
@@ -283,6 +305,8 @@ def create_rainbow_chart(
         dpi: 圖片解析度 (預設 150)
     """
     validate_inputs(eps_by_year, pe_bands)
+    if dpi <= 0:
+        raise ValueError("dpi 必須大於 0")
 
     if start_date is None:
         start_date, default_end_date = get_default_date_range()
@@ -292,10 +316,11 @@ def create_rainbow_chart(
 
     df = fetch_stock_data(ticker_symbol, start_date, end_date)
     if df is None:
-        return
+        return False
 
     price_bands_dynamic = calculate_price_bands(df, eps_by_year, pe_bands)
     band_colors = get_band_colors()
+    validate_pe_bands(pe_bands, band_colors)
     fig, ax = setup_chart()
 
     plot_rainbow_bands(ax, df, price_bands_dynamic, pe_bands, band_colors)
@@ -307,9 +332,11 @@ def create_rainbow_chart(
     plt.tight_layout()
 
     if save_path:
-        plt.savefig(save_path, dpi=dpi, bbox_inches="tight")
-        print(f"✅ 圖表已儲存至: {save_path}")
+        output_path = Path(save_path)
+        plt.savefig(output_path, dpi=dpi, bbox_inches="tight")
+        print(f"✅ 圖表已儲存至: {output_path}")
     else:
         plt.show()
 
     plt.close(fig)
+    return True

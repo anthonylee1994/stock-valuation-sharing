@@ -5,6 +5,7 @@
 from dataclasses import dataclass
 import json
 from pathlib import Path
+from typing import Any
 
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
@@ -20,7 +21,7 @@ class ValuationData:
     ticker: str
     eps_by_year: dict[int, float]
     pe_bands: dict[str, float]
-    raw: dict
+    raw: dict[str, Any]
     source_path: Path
 
 
@@ -31,11 +32,12 @@ def list_available_tickers() -> list[str]:
 
 def resolve_ticker(ticker_symbol: str) -> str:
     """將輸入 ticker 對應到實際檔名。"""
-    available = {ticker.upper(): ticker for ticker in list_available_tickers()}
+    available_tickers = list_available_tickers()
+    available = {ticker.upper(): ticker for ticker in available_tickers}
     normalized = ticker_symbol.upper()
 
     if normalized not in available:
-        available_list = ", ".join(list_available_tickers())
+        available_list = ", ".join(available_tickers)
         raise FileNotFoundError(f"找不到 {ticker_symbol} 嘅估值資料。可用代號: {available_list}")
 
     return available[normalized]
