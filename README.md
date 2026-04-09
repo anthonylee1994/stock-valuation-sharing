@@ -18,20 +18,30 @@
 uv sync
 ```
 
-### 生成單一股票圖表
+### 列出可用股票
 
 ```bash
-python GOOG.py      # Google/Alphabet
-python MSFT.py      # Microsoft
-python TSM.py       # 台積電
-python AVGO.py      # Broadcom
-python 0700.HK.py   # 騰訊控股
+uv run python -m stock_valuation.cli list
+```
+
+### 生成圖表
+
+```bash
+uv run python -m stock_valuation.cli generate GOOG
+uv run python -m stock_valuation.cli generate MSFT TSM
+uv run python -m stock_valuation.cli generate --all --save
+```
+
+### 驗證估值資料
+
+```bash
+uv run python -m stock_valuation.cli validate
 ```
 
 ### 自訂股票圖表
 
 ```python
-from rainbow_chart import create_rainbow_chart
+from stock_valuation import create_rainbow_chart
 
 # 設定 EPS 數據
 my_stock_eps = {
@@ -67,17 +77,16 @@ create_rainbow_chart(
 
 ```
 .
-├── rainbow_chart.py      # 彩虹估值圖生成器核心模組
-├── GOOG.py              # Google 圖表生成腳本
-├── MSFT.py              # Microsoft 圖表生成腳本
-├── TSM.py               # 台積電圖表生成腳本
-├── AVGO.py              # Broadcom 圖表生成腳本
-├── 0700.HK.py           # 騰訊控股圖表生成腳本
+├── stock_valuation/      # 核心程式碼與 CLI
+│   ├── __init__.py
+│   ├── chart.py          # 彩虹估值圖生成器
+│   ├── cli.py            # 命令列入口
+│   ├── data.py           # 路徑與估值資料載入
+│   └── validation.py     # JSON schema 驗證
 ├── data/
-│   ├── stocks/          # 個股分析文件 (MD + PDF)
-│   ├── images/          # 生成的圖表
-│   ├── models/          # 估值模型與方法論
-│   └── summary.md       # 投資組合總結
+│   ├── rainbow_charts/   # 個股分析、圖表與總結
+│   ├── references/       # 方法論與參考資料
+│   └── valuation/        # 結構化估值輸入 JSON
 └── README.md
 ```
 
@@ -91,7 +100,7 @@ create_rainbow_chart(
 | **AVGO**    | Broadcom        | 低估     | ⭐⭐⭐⭐ 買入       |
 | **0700.HK** | 騰訊控股        | 合理偏低 | ⭐⭐⭐⭐ 買入       |
 
-詳細分析請參閱 [summary.md](data/summary.md)
+詳細分析請參閱 [summary.md](data/reports/summary.md)
 
 ## 估值方法論
 
@@ -103,7 +112,7 @@ create_rainbow_chart(
 4. 結合未來 EPS 預測計算目標價
 5. 動態調整估值區間（每年根據 EPS 變化）
 
-詳細方法論請參閱 [估值模型計算步驟](data/models/估值模型計算步驟.md)
+詳細方法論請參閱 [估值模型計算步驟](data/references/估值模型計算步驟.md)
 
 ## 技術棧
 
