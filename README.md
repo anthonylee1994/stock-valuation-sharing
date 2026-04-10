@@ -42,7 +42,7 @@ uv run python -m stock_valuation.cli validate
 ### 計算回本 P/E
 
 ```bash
-uv run python -m stock_valuation.cli payback-pe 15
+uv run python -m stock_valuation.cli payback-pe 0.15
 uv run python -m stock_valuation.cli payback-pe 0.15 --years 12
 ```
 

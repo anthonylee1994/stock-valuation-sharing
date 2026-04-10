@@ -99,19 +99,11 @@ def handle_list(_: argparse.Namespace) -> int:
     return 0
 
 
-def normalize_growth_rate(growth_rate: float) -> float:
-    """支援傳入小數或百分比格式。"""
-    if growth_rate > 1:
-        return growth_rate / 100
-    return growth_rate
-
-
 def handle_payback_pe(args: argparse.Namespace) -> int:
     """計算指定增長率下嘅回本 P/E。"""
-    growth_rate = normalize_growth_rate(args.growth_rate)
-    pe_ratio = calculate_pe_for_payback(growth_rate=growth_rate, years=args.years)
+    pe_ratio = calculate_pe_for_payback(growth_rate=args.growth_rate, years=args.years)
 
-    print(f"增長率 = {growth_rate * 100:.2f}%")
+    print(f"增長率 = {args.growth_rate * 100:.2f}%")
     print(f"回本年期 = {args.years}")
     print(f"合理 P/E = {pe_ratio:.2f}")
     return 0

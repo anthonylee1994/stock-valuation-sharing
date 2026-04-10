@@ -10,10 +10,10 @@ def calculate_pe_for_payback(growth_rate: float, years: int = 10) -> float:
     if years > 1000:
         raise ValueError("years 不能大於 1000")
 
-    if growth_rate <= -1:
-        raise ValueError("growth_rate 必須大於 -1")
-    if growth_rate > 10:
-        raise ValueError("growth_rate 不能大於 10")
+    if growth_rate < -1:
+        raise ValueError("growth_rate 必須大於或等於 -1")
+    if growth_rate > 1:
+        raise ValueError("growth_rate 必須小於或等於 1")
 
     if growth_rate == 0:
         return float(years)
